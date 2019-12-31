@@ -18,9 +18,18 @@ if(window.location.href == "https://www.youtube.com/"){
 };
 
 window.onload = function(){
-    let playerAds = document.getElementById('player-ads');
+    let playerAds = document.getElementById("player-ads");
     if(playerAds){
         playerAds.remove();
         GM_log("Removed player side ad");
     }
+
+    setTimeout(function(){
+        let autoplayToggle = document.getElementById("toggleButton");
+        GM_log(autoplayToggle);
+        if(autoplayToggle){
+            autoplayToggle.click();
+            GM_log("Disabled autoplay");
+        }
+    }, 2000);
 };
