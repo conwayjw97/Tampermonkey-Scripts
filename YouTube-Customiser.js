@@ -14,4 +14,13 @@ GM_log("YouTube Customiser is running");
 
 if(window.location.href == "https://www.youtube.com/"){
     window.location.replace("https://www.youtube.com/feed/subscriptions");
-}
+    GM_log("Redirected you to your subscriptions");
+};
+
+window.onload = function(){
+    let playerAds = document.getElementById('player-ads');
+    if(playerAds){
+        playerAds.remove();
+        GM_log("Removed player side ad");
+    }
+};
