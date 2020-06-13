@@ -4,10 +4,12 @@
 // @version      0.1
 // @description  Block distracting websites
 // @author       James Conway
-// @match        *
+// @match        *://*/*
 // @grant        GM_log
 // @run-at       document-start
 // ==/UserScript==
+
+GM_log("Site Blocker is running");
 
 let blockList = [
     "https://www.youtube.com/",
@@ -18,9 +20,8 @@ let blockList = [
     "https://www.linkedin.com/",
     "https://www.music.youtube.com/",
     "https://discord.com/",
+    "https://en.wikipedia.org",
     ];
-
-GM_log("Site Blocker is running");
 
 let url = window.location.href;
 
