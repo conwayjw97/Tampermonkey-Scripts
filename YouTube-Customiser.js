@@ -2,7 +2,7 @@
 // @name         James's YouTube Customiser
 // @namespace    com.conwayjw97.ytcustomiser
 // @version      0.1
-// @description  Remove the big ad banner from YouTube's homepage
+// @description  Ad removal and personal feature mods
 // @author       James Conway
 // @match        https://www.youtube.com/*
 // @grant        GM_log
@@ -10,26 +10,41 @@
 // @run-at       document-start
 // ==/UserScript==
 
+// https://savemp3.cc/
+
 GM_log("YouTube Customiser is running");
 
-if(window.location.href == "https://www.youtube.com/"){
+let start = new Date();
+let url = window.location.href;
+
+if(url == "https://www.youtube.com/"){
     window.location.replace("https://www.youtube.com/feed/subscriptions");
     GM_log("Redirected you to your subscriptions");
 };
 
 window.onload = function(){
-    let playerAds = document.getElementById("player-ads");
-    if(playerAds){
-        playerAds.remove();
-        GM_log("Removed player side ad");
-    }
+    if(url.startsWith("https://www.youtube.com/watch")){
+        // 2 second wait necessary as certain portions are only loaded dynamically
+        setTimeout(function(){
+            let playerAds = document.getElementById("player-ads");
+            if(playerAds){
+                playerAds.remove();
+                GM_log("Removed player side ad");
+            };
 
-    setTimeout(function(){
-        let autoplayToggle = document.getElementById("toggleButton");
-        GM_log(autoplayToggle);
-        if(autoplayToggle){
-            autoplayToggle.click();
-            GM_log("Disabled autoplay");
-        }
-    }, 2000);
+            let autoplayToggle = document.getElementById("toggleButton");
+            if(autoplayToggle){
+                autoplayToggle.click();
+                GM_log("Disabled autoplay");
+            };
+
+            // Add a download to mp3 button
+//             let infoPane = document.getElementById("info-contents");
+//             GM_log(infoPane);
+//             let downloadToMp3 = document.createElement("button");
+//             downloadToMp3.innerHTML = "Load Comments";
+//             downloadToMp3.baseUri = "https://savemp3.cc/";
+//             infoPane.appendChild(downloadToMp3);
+        }, 2000);
+    }
 };
