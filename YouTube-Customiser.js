@@ -10,19 +10,50 @@
 // @run-at       document-start
 // ==/UserScript==
 
-// https://savemp3.cc/
-
 GM_log("YouTube Customiser is running");
 
-let start = new Date();
+let userHasScrolledUp = false;
+
+// Test when the user has scrolled up
+window.onscroll = function (e){
+    if(this.oldScroll > this.scrollY){
+        userHasScrolledUp = true;
+    }
+    this.oldScroll = this.scrollY;
+}
+
+function bottomScroll() {
+    GM_log("Scrolling to the bottom...");
+
+    window.scrollTo(0, document.getElementById("primary").scrollHeight);
+    userHasScrolledUp = false;
+
+    // Try to scroll again every second, stop when the user scrolls up
+    let intervalId = setInterval(function(){
+        window.scrollTo(0, document.getElementById("primary").scrollHeight);
+        if(userHasScrolledUp == true){
+            clearInterval(intervalId);
+        }
+    }, 1000);
+}
+
 let url = window.location.href;
 
 if(url == "https://www.youtube.com/"){
     window.location.replace("https://www.youtube.com/feed/subscriptions");
     GM_log("Redirected you to your subscriptions");
-};
+}
 
 window.onload = function(){
+    if(url.startsWith("https://www.youtube.com/playlist")){
+        let scrollToBottom = document.createElement("button");
+        scrollToBottom.innerHTML = "Scroll to Bottom (Scroll up to Stop)";
+        scrollToBottom.id = "ScrollToBottom";
+        scrollToBottom.onclick = function() {bottomScroll()};
+        document.getElementById("items").appendChild(scrollToBottom);
+        GM_log("Added scroll to bottom button");
+    }
+
     if(url.startsWith("https://www.youtube.com/watch")){
         // 2 second wait necessary as certain portions are only loaded dynamically
         setTimeout(function(){
@@ -37,14 +68,8 @@ window.onload = function(){
                 autoplayToggle.click();
                 GM_log("Disabled autoplay");
             };
-
-            // Add a download to mp3 button
-//             let infoPane = document.getElementById("info-contents");
-//             GM_log(infoPane);
-//             let downloadToMp3 = document.createElement("button");
-//             downloadToMp3.innerHTML = "Load Comments";
-//             downloadToMp3.baseUri = "https://savemp3.cc/";
-//             infoPane.appendChild(downloadToMp3);
         }, 2000);
     }
-};
+}
+
+
