@@ -68,6 +68,13 @@ window.onload = function(){
                 autoplayToggle.click();
                 GM_log("Disabled autoplay");
             };
+
+            let scrollToBottom = document.createElement("button");
+            scrollToBottom.innerHTML = "Scroll to Bottom (Scroll up to Stop)";
+            scrollToBottom.id = "ScrollToBottom";
+            scrollToBottom.onclick = function() {bottomScroll()};
+            document.getElementById("info-contents").appendChild(scrollToBottom);
+            GM_log("Added scroll to bottom button");
         }, 2000);
     }
 }
