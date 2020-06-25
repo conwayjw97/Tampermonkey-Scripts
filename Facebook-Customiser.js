@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         James's Facebook Customiser
+// @name         Facebook Customiser
 // @namespace    com.conwayjw97.fbcustomiser
 // @version      0.1
 // @author       James Conway
