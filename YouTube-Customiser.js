@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         James's YouTube Customiser
+// @name         YouTube Customiser
 // @namespace    com.conwayjw97.ytcustomiser
 // @version      0.1
 // @description  Ad removal and personal feature mods
