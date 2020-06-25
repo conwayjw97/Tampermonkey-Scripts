@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         James's Site Blocker
+// @name         Site Blocker
 // @namespace    com.conwayjw97.siteblocker
 // @version      0.1
 // @description  Block distracting websites
@@ -28,6 +28,6 @@ let url = window.location.href;
 for(let blockedUrl of blockList){
     if(url.startsWith(blockedUrl)){
         window.stop();
-        alert("You're on a blocked site");
+        alert("This is a blocked website.");
     };
 }
