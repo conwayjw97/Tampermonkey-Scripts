@@ -14,14 +14,6 @@ GM_log("YouTube Customiser is running");
 
 let userHasScrolledUp = false;
 
-// Test when the user has scrolled up
-window.onscroll = function (e){
-    if(this.oldScroll > this.scrollY){
-        userHasScrolledUp = true;
-    }
-    this.oldScroll = this.scrollY;
-}
-
 function bottomScroll() {
     GM_log("Scrolling to the bottom...");
 
@@ -37,20 +29,22 @@ function bottomScroll() {
     }, 1000);
 }
 
-let url = window.location.href;
-
-if(url == "https://www.youtube.com/"){
-    window.location.replace("https://www.youtube.com/feed/subscriptions");
-    GM_log("Redirected you to your subscriptions");
+window.onscroll = function (e){
+    if(this.oldScroll > this.scrollY){
+        userHasScrolledUp = true;
+    }
+    this.oldScroll = this.scrollY;
 }
 
 window.onload = function(){
+    let url = window.location.href;
+
     if(url.startsWith("https://www.youtube.com/playlist")){
         let scrollToBottom = document.createElement("button");
         scrollToBottom.innerHTML = "Scroll to Bottom (Scroll up to Stop)";
         scrollToBottom.id = "ScrollToBottom";
         scrollToBottom.onclick = function() {bottomScroll()};
-        document.getElementById("items").appendChild(scrollToBottom);
+        document.getElementById("alerts").appendChild(scrollToBottom);
         GM_log("Added scroll to bottom button");
     }
 
