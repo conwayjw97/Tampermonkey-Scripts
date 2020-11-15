@@ -10,7 +10,11 @@
 
 GM_log("Facebook Customiser is running");
 
-if(window.location.href == "https://www.facebook.com/"){
-    window.location.replace("https://www.facebook.com/messages");
-    GM_log("Redirected you to your messages");
-};
+// 2 second interval necessary as some pages are loaded dynamically
+const redirectCheck = setInterval(function(){
+    if(window.location.href == "https://www.facebook.com/"){
+        window.stop();
+        window.location.replace("https://www.facebook.com/messages");
+        GM_log("Redirected you to your messages");
+    };
+}, 1000);
