@@ -10,7 +10,7 @@
 
 GM_log("Facebook Customiser is running");
 
-// 2 second interval necessary as some pages are loaded dynamically
+// 1 second interval necessary as some pages are loaded dynamically
 const redirectCheck = setInterval(function(){
     if(window.location.href == "https://www.facebook.com/"){
         window.stop();
