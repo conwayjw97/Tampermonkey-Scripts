@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Site Blocker
+// @name         Work Focus Site Blocker
 // @namespace    com.conwayjw97.siteblocker
 // @version      0.1
 // @description  Block distracting websites
@@ -16,18 +16,27 @@ let blockList = [
     "https://www.facebook.com/",
     "https://www.soundcloud.com/",
     "https://www.reddit.com/",
-    "https://www.twitter.com/",
+    "https://twitter.com/",
     "https://www.linkedin.com/",
     "https://www.music.youtube.com/",
+    "https://bandcamp.com/",
     "https://discord.com/",
-    "https://en.wikipedia.org",
+    "https://tiktok.com/",
+    "https://www.instagram.com/",
     ];
 
 let url = window.location.href;
 
-for(let blockedUrl of blockList){
-    if(url.startsWith(blockedUrl)){
-        window.stop();
-        alert("This is a blocked website.");
-    };
+let date = new Date();
+let day = date.getDay();
+let hour = date.getHours();
+
+// If the current time is a weekday between 9 and 5
+if((day > 0 && day <6) && (hour > 8 && hour < 17)){
+    for(let blockedUrl of blockList){
+        if(url.startsWith(blockedUrl)){
+            window.stop();
+            alert("GET BACK TO WORK!!!");
+        };
+    }
 }
