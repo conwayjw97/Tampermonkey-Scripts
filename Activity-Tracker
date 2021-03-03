@@ -1,0 +1,45 @@
+// ==UserScript==
+// @name         Activity Tracker
+// @namespace    com.conwayjw97.activitytracker
+// @version      0.1
+// @description  Track time spent on websites
+// @author       James Conway
+// @match        *://*/*
+// @grant        GM_log
+// @grant        GM_getValue
+// @grant        GM_setValue
+// @run-at       document-start
+// ==/UserScript==
+
+function minuteDifference(startDate, endDate){
+    let diff = secondDifference(startDate, endDate);
+    diff /= 60;
+    return Math.abs(Math.round(diff));
+}
+
+function secondDifference(startDate, endDate){
+    let diff = (endDate.getTime() - startDate.getTime()) / 1000;
+    return Math.abs(Math.round(diff));
+}
+
+GM_log("Activity Tracker is running");
+
+let url = window.location;
+let baseUrl = url.protocol + "//" + url.host + "/" + url.pathname.split('/')[1];
+
+let accessDate = new Date();
+let todaysDate = accessDate.getDate() + "/" + accessDate.getMonth() + "/" + accessDate.getFullYear();
+
+window.onbeforeunload = async function (e) {
+    let leaveDate = new Date();
+    let secondsSpent = secondDifference(accessDate, leaveDate);
+    let minutesSpent = minuteDifference(accessDate, leaveDate);
+    let todaysTrackingData = JSON.parse(await GM_getValue(todaysDate, "{}"));
+    let todaysSiteTrackingData = secondsSpent;
+    if(todaysTrackingData.hasOwnProperty(baseUrl)){
+        todaysSiteTrackingData = todaysTrackingData[baseUrl] + secondsSpent;
+    }
+    todaysTrackingData[baseUrl] = todaysSiteTrackingData;
+    GM_setValue(todaysDate, JSON.stringify(todaysTrackingData));
+    GM_log("Updated today's site tracking data: " + todaysSiteTrackingData);
+};
