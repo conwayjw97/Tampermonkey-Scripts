@@ -32,7 +32,9 @@ function todaysTrackingDataPrettyPrint(todaysTrackingData, headline="Today's Act
     GM_log(headline + "\n");
     GM_log("--------------------------------\n");
 
-    for (let baseUrl in todaysTrackingData){
+    let sortedBaseUrls = Object.keys(todaysTrackingData).sort(function(a,b){return todaysTrackingData[b]-todaysTrackingData[a]});
+
+    for (let baseUrl of sortedBaseUrls){
         GM_log(baseUrl + ": " + secondToMinute(todaysTrackingData[baseUrl]) + "min " + (todaysTrackingData[baseUrl] - (secondToMinute(todaysTrackingData[baseUrl]) * 60)) + "sec\n");
     }
 
