@@ -28,17 +28,17 @@ function secondToMinute(seconds){
 }
 
 function todaysTrackingDataPrettyPrint(todaysTrackingData, headline="Today's Activity Tracking Report"){
-    GM_log("================================\n");
-    GM_log(headline + "\n");
-    GM_log("--------------------------------\n");
+    GM_log("================================");
+    GM_log(headline);
+    GM_log("--------------------------------");
 
     let sortedBaseUrls = Object.keys(todaysTrackingData).sort(function(a,b){return todaysTrackingData[b]-todaysTrackingData[a]});
 
     for (let baseUrl of sortedBaseUrls){
-        GM_log(baseUrl + ": " + secondToMinute(todaysTrackingData[baseUrl]) + "min " + (todaysTrackingData[baseUrl] - (secondToMinute(todaysTrackingData[baseUrl]) * 60)) + "sec\n");
+        GM_log(baseUrl + ": " + secondToMinute(todaysTrackingData[baseUrl]) + "min " + (todaysTrackingData[baseUrl] - (secondToMinute(todaysTrackingData[baseUrl]) * 60)) + "sec");
     }
 
-    GM_log("================================\n");
+    GM_log("================================");
 }
 
 let url = window.location;
@@ -47,7 +47,11 @@ let baseUrl = url.protocol + "//" + url.host + "/";
 let accessDate = new Date();
 let todaysDate = accessDate.getDate() + "/" + (accessDate.getMonth()+1) + "/" + accessDate.getFullYear(); // Javascript months start from 0 so 1 added
 
-window.onbeforeunload = async function (e) {
+window.onfocus = async function (e){
+    accessDate = new Date();
+}
+
+window.onblur = async function (e){
     let leaveDate = new Date();
     let secondsSpent = secondDifference(accessDate, leaveDate);
 
@@ -60,9 +64,9 @@ window.onbeforeunload = async function (e) {
     todaysTrackingData[baseUrl] = totalSecondsSpent;
 
     GM_setValue(todaysDate, JSON.stringify(todaysTrackingData));
-};
+}
 
-window.onload = async function (e) {
+window.onload = async function (e){
     let todaysTrackingData = JSON.parse(await GM_getValue(todaysDate, "{}"));
     todaysTrackingDataPrettyPrint(todaysTrackingData, "Today's Activity Tracking Report: " + todaysDate);
 };
