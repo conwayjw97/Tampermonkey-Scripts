@@ -5,6 +5,7 @@
 // @description  Track time spent on websites
 // @author       James Conway
 // @match        *://*/*
+// @match        *//*/*
 // @grant        GM_log
 // @grant        GM_getValue
 // @grant        GM_setValue
@@ -22,10 +23,31 @@ function secondDifference(startDate, endDate){
     return Math.abs(Math.round(diff));
 }
 
+function todaysTrackingDataMinuteConversion(todaysTrackingData){
+    for (let baseUrl in todaysTrackingData){
+        let totalSecondsSpent = todaysTrackingData[baseUrl];
+        let totalMinutesSpent = Math.floor(totalSecondsSpent * 0.0166667);
+        todaysTrackingData[baseUrl] = totalMinutesSpent;
+    }
+    return todaysTrackingData;
+}
+
+function todaysTrackingDataPrettyPrint(todaysTrackingData){
+    GM_log("Today's Activity Tracking Report\n");
+    GM_log("================================\n");
+
+    for (let baseUrl in todaysTrackingData){
+        GM_log(baseUrl + ": " + todaysTrackingData[baseUrl] + "\n");
+    }
+
+    GM_log("================================\n");
+}
+
 GM_log("Activity Tracker is running");
 
 let url = window.location;
 let baseUrl = url.protocol + "//" + url.host + "/" + url.pathname.split('/')[1];
+
 
 let accessDate = new Date();
 let todaysDate = accessDate.getDate() + "/" + accessDate.getMonth() + "/" + accessDate.getFullYear();
@@ -33,13 +55,16 @@ let todaysDate = accessDate.getDate() + "/" + accessDate.getMonth() + "/" + acce
 window.onbeforeunload = async function (e) {
     let leaveDate = new Date();
     let secondsSpent = secondDifference(accessDate, leaveDate);
-    let minutesSpent = minuteDifference(accessDate, leaveDate);
+
     let todaysTrackingData = JSON.parse(await GM_getValue(todaysDate, "{}"));
-    let todaysSiteTrackingData = secondsSpent;
+
+    let totalSecondsSpent = secondsSpent;
     if(todaysTrackingData.hasOwnProperty(baseUrl)){
-        todaysSiteTrackingData = todaysTrackingData[baseUrl] + secondsSpent;
+        totalSecondsSpent = todaysTrackingData[baseUrl] + secondsSpent;
     }
-    todaysTrackingData[baseUrl] = todaysSiteTrackingData;
+    todaysTrackingData[baseUrl] = totalSecondsSpent;
+
     GM_setValue(todaysDate, JSON.stringify(todaysTrackingData));
-    GM_log("Updated today's site tracking data: " + todaysSiteTrackingData);
+    todaysTrackingDataPrettyPrint(todaysTrackingData);
+    todaysTrackingDataPrettyPrint(todaysTrackingDataMinuteConversion(todaysTrackingData));
 };
