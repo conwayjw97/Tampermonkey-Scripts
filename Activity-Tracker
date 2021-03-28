@@ -15,30 +15,57 @@
 function minuteDifference(startDate, endDate){
     let diff = secondDifference(startDate, endDate);
     diff /= 60;
-    return Math.abs(Math.round(diff));
+    return Math.abs(Math.ceil(diff));
 }
 
 function secondDifference(startDate, endDate){
     let diff = (endDate.getTime() - startDate.getTime()) / 1000;
-    return Math.abs(Math.round(diff));
+    return Math.abs(Math.ceil(diff));
 }
 
-function secondToMinute(seconds){
+function secondsToMinutes(seconds){
     return Math.floor(seconds * 0.0166667);
 }
 
+function secondsToHours(seconds){
+    return Math.floor(seconds * 0.000277778);
+}
+
+function secondsPrettyPrint(seconds){
+    let hoursToPrint, minutesToPrint, secondsToPrint;
+    hoursToPrint = minutesToPrint = secondsToPrint = 0;
+    hoursToPrint = secondsToHours(seconds);
+    minutesToPrint = secondsToMinutes(seconds) - (hoursToPrint * 60);
+    secondsToPrint = seconds - (hoursToPrint * 3600) - (minutesToPrint * 60);
+
+    let outputString = "";
+    outputString = hoursToPrint !== 0 ? (outputString + (hoursToPrint + "hr ")) : outputString;
+    outputString = minutesToPrint !== 0 ? (outputString + (minutesToPrint + "min ")) : outputString;
+    outputString = secondsToPrint !== 0 ? (outputString + (secondsToPrint + "sec ")) : outputString;
+
+    return outputString;
+}
+
 function todaysTrackingDataPrettyPrint(todaysTrackingData, headline="Today's Activity Tracking Report"){
-    GM_log("================================");
-    GM_log(headline);
-    GM_log("--------------------------------");
+    let outputString = "";
+    outputString += ("===================================\n");
+    outputString += (headline + "\n");
+    outputString += ("-----------------------------------\n");
 
     let sortedBaseUrls = Object.keys(todaysTrackingData).sort(function(a,b){return todaysTrackingData[b]-todaysTrackingData[a]});
 
+    let totalSecondsSpent = 0;
     for (let baseUrl of sortedBaseUrls){
-        GM_log(baseUrl + ": " + secondToMinute(todaysTrackingData[baseUrl]) + "min " + (todaysTrackingData[baseUrl] - (secondToMinute(todaysTrackingData[baseUrl]) * 60)) + "sec");
+        if(todaysTrackingData[baseUrl] > 0){
+            outputString += (baseUrl + ": " + secondsPrettyPrint(todaysTrackingData[baseUrl]) + "\n");
+            totalSecondsSpent += todaysTrackingData[baseUrl];
+        }
     }
 
-    GM_log("================================");
+    outputString += ("-----------------------------------\n");
+    outputString += ("Total Screen Time on this Browser: " + secondsPrettyPrint(totalSecondsSpent) + "\n");
+    outputString += ("===================================\n");
+    GM_log(outputString);
 }
 
 let url = window.location;
@@ -61,7 +88,9 @@ window.onblur = async function (e){
     if(todaysTrackingData.hasOwnProperty(baseUrl)){
         totalSecondsSpent = todaysTrackingData[baseUrl] + secondsSpent;
     }
-    todaysTrackingData[baseUrl] = totalSecondsSpent;
+    else if(totalSecondsSpent > 0){
+        todaysTrackingData[baseUrl] = totalSecondsSpent;
+    }
 
     GM_setValue(todaysDate, JSON.stringify(todaysTrackingData));
 }
