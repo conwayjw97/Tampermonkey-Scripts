@@ -84,12 +84,11 @@ window.onblur = async function (e){
 
     let todaysTrackingData = JSON.parse(await GM_getValue(todaysDate, "{}"));
 
-    let totalSecondsSpent = secondsSpent;
     if(todaysTrackingData.hasOwnProperty(baseUrl)){
-        totalSecondsSpent = todaysTrackingData[baseUrl] + secondsSpent;
+        todaysTrackingData[baseUrl] = todaysTrackingData[baseUrl] + secondsSpent;
     }
-    else if(totalSecondsSpent > 0){
-        todaysTrackingData[baseUrl] = totalSecondsSpent;
+    else if(secondsSpent > 0){
+        todaysTrackingData[baseUrl] = secondsSpent;
     }
 
     GM_setValue(todaysDate, JSON.stringify(todaysTrackingData));
