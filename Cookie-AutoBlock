@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Cookie AutoBlock
-// @namespace    com.conwayjw97.cookieremover
+// @namespace    com.conwayjw97.cookieblock
 // @version      0.1
-// @description  See what cookies are being added by a webpage
+// @description  Automatically block all non-HttpOnly, non-Path cookies
 // @author       James Conway
 // @match        *://*/*
 // @match        *//*/*
