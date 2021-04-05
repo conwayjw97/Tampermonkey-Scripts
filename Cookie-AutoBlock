@@ -1,0 +1,29 @@
+// ==UserScript==
+// @name         Cookie AutoBlock
+// @namespace    com.conwayjw97.cookieremover
+// @version      0.1
+// @description  See what cookies are being added by a webpage
+// @author       James Conway
+// @match        *://*/*
+// @match        *//*/*
+// @grant        GM_log
+// @run-at       document-start
+// ==/UserScript==
+
+let cookies = document.cookie.split(';');
+let outputString = "";
+outputString += "===================================\n";
+outputString += "Cookies blocked for this page.\n";
+outputString += "-----------------------------------\n";
+
+for (let i = 0; i < cookies.length; i++) {
+    let name = cookies[i].split("=")[0];
+    let value = cookies[i].split("=")[1];
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    outputString += (name.trim() + "\n");
+}
+
+outputString = outputString.slice(0, -2);
+outputString += ("\n===================================\n");
+
+GM_log(outputString);
