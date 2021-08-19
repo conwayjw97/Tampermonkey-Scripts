@@ -95,6 +95,8 @@ window.onblur = async function (e){
 }
 
 window.onload = async function (e){
-    let todaysTrackingData = JSON.parse(await GM_getValue(todaysDate, "{}"));
-    todaysTrackingDataPrettyPrint(todaysTrackingData, "Today's Activity Tracking Report: " + todaysDate);
+    if(!url.host.startsWith("localhost")){
+        let todaysTrackingData = JSON.parse(await GM_getValue(todaysDate, "{}"));
+        todaysTrackingDataPrettyPrint(todaysTrackingData, "Today's Activity Tracking Report: " + todaysDate);
+    }
 };
