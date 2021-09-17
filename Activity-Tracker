@@ -6,7 +6,6 @@
 // @author       James Conway
 // @match        *://*/*
 // @match        *//*/*
-// @grant        GM_log
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @run-at       document-start
@@ -47,25 +46,21 @@ function secondsPrettyPrint(seconds){
 }
 
 function todaysTrackingDataPrettyPrint(todaysTrackingData, headline="Today's Activity Tracking Report"){
-    let outputString = "";
-    outputString += ("===================================\n");
-    outputString += (headline + "\n");
-    outputString += ("-----------------------------------\n");
+    console.groupCollapsed(headline);
 
     let sortedBaseUrls = Object.keys(todaysTrackingData).sort(function(a,b){return todaysTrackingData[b]-todaysTrackingData[a]});
 
     let totalSecondsSpent = 0;
     for (let baseUrl of sortedBaseUrls){
         if(todaysTrackingData[baseUrl] > 0){
-            outputString += (baseUrl + ": " + secondsPrettyPrint(todaysTrackingData[baseUrl]) + "\n");
+            console.log(baseUrl + ": " + secondsPrettyPrint(todaysTrackingData[baseUrl]) + "\n");
             totalSecondsSpent += todaysTrackingData[baseUrl];
         }
     }
 
-    outputString += ("-----------------------------------\n");
-    outputString += ("Total Screen Time on this Browser: " + secondsPrettyPrint(totalSecondsSpent) + "\n");
-    outputString += ("===================================\n");
-    GM_log(outputString);
+    console.log("-----------------------------------\n");
+    console.log("Total Screen Time on this Browser: " + secondsPrettyPrint(totalSecondsSpent) + "\n");
+    console.groupEnd();
 }
 
 let url = window.location;
