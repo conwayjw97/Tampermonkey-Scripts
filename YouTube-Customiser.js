@@ -39,7 +39,13 @@ window.onscroll = function (e){
 window.onload = function(){
     let url = window.location.href;
 
-    if(url.startsWith("https://www.youtube.com/playlist")){
+    if(url == "https://www.youtube.com/"){
+        let contents = document.getElementById("contents");
+        contents.remove();
+        GM_log("Deleted home page contents");
+    }
+
+    else if(url.startsWith("https://www.youtube.com/playlist")){
         let scrollToBottom = document.createElement("button");
         scrollToBottom.innerHTML = "Scroll to Bottom (Scroll up to Stop)";
         scrollToBottom.id = "ScrollToBottom";
@@ -48,7 +54,7 @@ window.onload = function(){
         GM_log("Added scroll to bottom button");
     }
 
-    if(url.startsWith("https://www.youtube.com/watch")){
+    else if(url.startsWith("https://www.youtube.com/watch")){
         // 2 second wait necessary as certain portions are only loaded dynamically
         setTimeout(function(){
             let playerAds = document.getElementById("player-ads");
@@ -72,5 +78,4 @@ window.onload = function(){
         }, 2000);
     }
 }
-
 
