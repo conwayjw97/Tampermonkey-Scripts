@@ -22,31 +22,39 @@ let blockList = [
     "https://www.instagram.com/",
 ];
 
-let url = window.location.href;
+if(isScriptTime() && isBlockedSite()){
+    let bodyAppeared = false;
+    let scriptStarted = false;
 
-let date = new Date();
-let day = date.getDay();
-let hour = date.getHours();
+    setInterval(function(){
+        if(document.body != null){
+            bodyAppeared = true;
+        }
 
-// If the current time is a weekday between 9 and 5
-if((day > 0 && day <6) && (hour > 8 && hour < 17)){
+        if(bodyAppeared == true && scriptStarted == false){
+            scriptStarted = true;
+            script();
+        }
+    }, 1000);
+}
+
+function isScriptTime(){
+    let date = new Date();
+    let day = date.getDay();
+    let hour = date.getHours();
+
+    // If the current time is a weekday between 9 and 5
+    return (day > 0 && day <6) && (hour > 8 && hour < 17);
+}
+
+function isBlockedSite(){
+    let url = window.location.href;
     for(let blockedUrl of blockList){
         if(url.startsWith(blockedUrl)){
-            let bodyAppeared = false;
-            let scriptStarted = false;
-
-            setInterval(function(){
-                if(document.body != null){
-                    bodyAppeared = true;
-                }
-
-                if(bodyAppeared == true && scriptStarted == false){
-                    scriptStarted = true;
-                    script(blockedUrl);
-                }
-            }, 1000);
-        };
+            return true;
+        }
     }
+    return false;
 }
 
 function script(blockedUrl){
