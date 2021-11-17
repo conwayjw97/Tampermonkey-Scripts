@@ -29,7 +29,7 @@ let day = date.getDay();
 let hour = date.getHours();
 
 // If the current time is a weekday between 9 and 5
-//if((day > 0 && day <6) && (hour > 8 && hour < 17)){
+if((day > 0 && day <6) && (hour > 8 && hour < 17)){
     for(let blockedUrl of blockList){
         if(url.startsWith(blockedUrl)){
             let bodyAppeared = false;
@@ -47,7 +47,7 @@ let hour = date.getHours();
             }, 1000);
         };
     }
-//}
+}
 
 function script(blockedUrl){
     // Clear page
