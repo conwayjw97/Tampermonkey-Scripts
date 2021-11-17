@@ -41,7 +41,18 @@ window.onload = function(){
 
     if(url == "https://www.youtube.com/"){
         let contents = document.getElementById("contents");
+        console.info(contents);
         contents.remove();
+
+        let message = document.createElement("div");
+        message.innerHTML = "Same Old";
+        message.style.color = "white";
+        message.style.fontSize = "2000%";
+        message.style.display = "flex";
+        message.style.justifyContent = "center";
+        message.style.alignItems = "center";
+        console.info(message);
+        document.getElementById("content").appendChild(message);
         GM_log("Deleted home page contents");
     }
 
