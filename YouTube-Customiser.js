@@ -14,22 +14,23 @@ console.log("YouTube Customiser is running");
 let userHasScrolledUp = false;
 
 function bottomScroll() {
-    GM_log("Scrolling to the bottom...");
+    console.log("Scrolling to the bottom...");
 
     window.scrollTo(0, document.getElementById("primary").scrollHeight);
     userHasScrolledUp = false;
 
     // Try to scroll again every second, stop when the user scrolls up
-    let intervalId = setInterval(function(){
+    const intervalId = setInterval(function(){
         window.scrollTo(0, document.getElementById("primary").scrollHeight);
         if(userHasScrolledUp == true){
+            console.log("Scrolling stopped.");
             clearInterval(intervalId);
         }
     }, 1000);
 }
 
 function removeContents(){
-    let contents = document.getElementById("contents");
+    const contents = document.getElementById("contents");
     console.info(contents);
     contents.remove();
 
