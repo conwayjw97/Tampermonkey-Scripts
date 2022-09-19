@@ -22,7 +22,7 @@ let blockList = [
     "https://www.instagram.com/",
 ];
 
-if(isScriptTime() && isBlockedSite()){
+if(isBlockedSite()){
     let bodyAppeared = false;
     let scriptStarted = false;
 
@@ -36,15 +36,6 @@ if(isScriptTime() && isBlockedSite()){
             script();
         }
     }, 1000);
-}
-
-function isScriptTime(){
-    let date = new Date();
-    let day = date.getDay();
-    let hour = date.getHours();
-
-    // If the current time is a weekday between 9 and 5
-    return (day > 0 && day <6) && (hour > 8 && hour < 17);
 }
 
 function isBlockedSite(){
