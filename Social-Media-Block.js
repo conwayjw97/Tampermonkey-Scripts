@@ -49,19 +49,50 @@ function isBlockedSite(){
 }
 
 function script(){
+    window.stop();
+
+    // Create contents
+    const div = document.createElement('div');
+
+    div.appendChild(createIcon());
+    div.appendChild(createMessage());
+    div.appendChild(createIcon());
+
     // Clear page
-    document.body.innerHTML = '';
+    document.documentElement.innerHTML = '';
+    document.body.appendChild(div);
+    document.createElement('div');
 
     // Add styling
-    let css = `
+    const css = `
                     body { background-color: #1a1a1b; }
-                    div { text-align: center; color: white; font-size: 99px; position: absolute; left: 50%; top: 50%; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%); }
+                    div {
+                        text-align: center;
+                        font-family: Consolas,monaco,monospace;
+                        color: white;
+                        font-size: 64px;
+                        position: absolute;
+                        width: 100%;
+                        left: 50%; top: 50%;
+                        -webkit-transform: translate(-50%, -50%);
+                        transform: translate(-50%, -50%);
+                    }
+                    img { margin: 0px 50px 10px 50px; }
                 `;
     GM_addStyle(css);
-
-    // Add contents
-    let div = document.createElement('div');
-    div.innerHTML = window.location.host + ' is Blocked';
-    document.body.appendChild(div);
 }
 
+function createIcon(){
+    const img = document.createElement('img');
+    img.src = `http://www.google.com/s2/favicons?domain=` + window.location.host;
+    img.width = `24`;
+    return img;
+}
+
+function createMessage(){
+    const span = document.createElement('span');
+    let site = window.location.host.replace("www.", "").replace(".com", "");
+    site = site.charAt(0).toUpperCase() + site.slice(1);
+    span.innerHTML = site + ' is Blocked';
+    return span;
+}
