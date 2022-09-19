@@ -10,8 +10,6 @@
 // @run-at       document-start
 // ==/UserScript==
 
-console.log('Social Media Block is running');
-
 let blockList = [
     "https://www.facebook.com/",
     "https://www.reddit.com/",
@@ -49,21 +47,11 @@ function isBlockedSite(){
 }
 
 function script(){
-    window.stop();
+    console.log('Social Media Block is running');
 
-    // Create contents
-    const div = document.createElement('div');
+    clearPage();
 
-    div.appendChild(createIcon());
-    div.appendChild(createMessage());
-    div.appendChild(createIcon());
-
-    // Clear page
-    document.documentElement.innerHTML = '';
-    document.body.appendChild(div);
-    document.createElement('div');
-
-    // Add styling
+    // Styling
     const css = `
                     body { background-color: #1a1a1b; }
                     div {
@@ -80,10 +68,30 @@ function script(){
                     img { margin: 0px 50px 10px 50px; }
                 `;
     GM_addStyle(css);
+
+    // Contents
+    const div = document.createElement('div');
+
+    div.appendChild(createIcon());
+    div.appendChild(createMessage());
+    div.appendChild(createIcon());
+
+    document.body.appendChild(div);
+    document.createElement('div');
+}
+
+function clearPage(){
+    window.stop();
+    document.documentElement.innerHTML = '';
+    document.body.innerHTML = '';
+    document.title = "!!! BLOCKED !!!";
 }
 
 function createIcon(){
     const img = document.createElement('img');
+    img.onerror = function () {
+        this.src = undefined;
+    };
     img.src = `http://www.google.com/s2/favicons?domain=` + window.location.host;
     img.width = `24`;
     return img;
